@@ -239,6 +239,12 @@ header.top::after{content:"";position:absolute;inset:-40px -60px auto auto;width
 .btn{border:1px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:9px;padding:9px 14px;font-weight:600;cursor:pointer;font-size:14px}
 .btn.ghost{background:transparent;color:var(--ink)}
 .btn.danger{background:transparent;color:var(--danger);border-color:var(--danger)}
+.calall{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.calday{font-family:var(--f-display);font-weight:700;font-size:18px;text-transform:uppercase;margin-top:10px}
+.calrow{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px dashed var(--line)}
+.calmain{flex:1;min-width:0;font-size:14px}
+.calmain span{display:block;color:var(--muted);font-size:12.5px}
+a.btn{text-decoration:none;white-space:nowrap}
 .planhead{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin-top:14px}
 .planhead strong{font-family:var(--f-display);font-size:30px;line-height:1}
 textarea.copybox{width:100%;min-height:160px;margin-top:10px;font:13px/1.4 ui-monospace,monospace;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
@@ -647,6 +653,70 @@ function toggle(id){
 }
 const PIN='<svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z"/><circle cx="8" cy="6.5" r="1.8"/></svg>';
 
+/* sharing + calendar export */
+const PUBLIC_URL='https://bremondr.github.io/obzory-planovac/';
+const EMBEDDED=(()=>{try{return window.top!==window}catch(e){return true}})();
+function shareURL(){return (EMBEDDED?PUBLIC_URL:location.origin+location.pathname)+'#plan-'+[...st.plan].join('-')}
+function copyOut(txt,okMsg){
+  const fallback=()=>{st.copyText=txt;render();const c=$('#copybox');if(c){c.focus();c.select()}toast('Kopírování se nepovedlo, text je označený níže')};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(()=>{if(st.copyText!==null){st.copyText=null;render()}toast(okMsg)}).catch(fallback);
+  else fallback();
+}
+const DDATE={pa:'2026-11-06',so:'2026-11-07',ne:'2026-11-08'};
+const ADDR='Filozofická fakulta UK, nám. Jana Palacha 2, Praha 1';
+const hms=m=>String(Math.floor(m/60)).padStart(2,'0')+String(m%60).padStart(2,'0')+'00';
+const ymd=d=>DDATE[d].replace(/-/g,'');
+const nextYmd=d=>{const t=new Date(DDATE[d]+'T12:00:00Z');t.setUTCDate(t.getUTCDate()+1);return t.toISOString().slice(0,10).replace(/-/g,'')};
+const evLoc=it=>/Praha/.test(it.place)?it.place:`${ADDR} · ${locText(it)}`;
+const evDetails=it=>[it.who,it.note,it.flex&&!it.all?'Konzultace: přijď kdykoli během bloku.':'',it.url,'Festival Obzory 2026'].filter(Boolean).join('\n');
+function gcalURL(it){
+  const dates=it.all?`${ymd(it.day)}/${nextYmd(it.day)}`:`${ymd(it.day)}T${hms(it.start)}/${ymd(it.day)}T${hms(it.end)}`;
+  const p=new URLSearchParams({action:'TEMPLATE',text:`${it.title} · Obzory`,dates,details:evDetails(it),location:evLoc(it)});
+  if(!it.all)p.set('ctz','Europe/Prague');
+  return 'https://calendar.google.com/calendar/render?'+p.toString();
+}
+const icsEsc=v=>String(v).replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n');
+const icsFold=l=>{const out=[];let r=l;while(r.length>70){out.push(r.slice(0,70));r=' '+r.slice(70)}out.push(r);return out.join('\r\n')};
+function planItemsSorted(){const o={pa:0,so:1,ne:2};return [...st.plan].map(id=>BY[id]).filter(Boolean).sort((a,b)=>o[a.day]-o[b.day]||(b.all-a.all)||a.start-b.start)}
+function buildICS(){
+  const now=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+Z$/,'Z');
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Obzory Planovac//CS','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Obzory 2026 – můj plán','X-WR-TIMEZONE:Europe/Prague',
+    'BEGIN:VTIMEZONE','TZID:Europe/Prague',
+    'BEGIN:DAYLIGHT','TZOFFSETFROM:+0100','TZOFFSETTO:+0200','TZNAME:CEST','DTSTART:19700329T020000','RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU','END:DAYLIGHT',
+    'BEGIN:STANDARD','TZOFFSETFROM:+0200','TZOFFSETTO:+0100','TZNAME:CET','DTSTART:19701025T030000','RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU','END:STANDARD',
+    'END:VTIMEZONE'];
+  for(const it of planItemsSorted()){
+    L.push('BEGIN:VEVENT',`UID:obzory2026-${it.id}@obzory-planovac`,`DTSTAMP:${now}`);
+    if(it.all)L.push(`DTSTART;VALUE=DATE:${ymd(it.day)}`,`DTEND;VALUE=DATE:${nextYmd(it.day)}`);
+    else L.push(`DTSTART;TZID=Europe/Prague:${ymd(it.day)}T${hms(it.start)}`,`DTEND;TZID=Europe/Prague:${ymd(it.day)}T${hms(it.end)}`);
+    L.push(`SUMMARY:${icsEsc(it.title+' · Obzory')}`,`LOCATION:${icsEsc(evLoc(it))}`,`DESCRIPTION:${icsEsc(evDetails(it))}`);
+    if(it.url)L.push(`URL:${it.url}`);
+    if(it.flex)L.push('TRANSP:TRANSPARENT');
+    L.push('END:VEVENT');
+  }
+  L.push('END:VCALENDAR');
+  return L.map(icsFold).join('\r\n')+'\r\n';
+}
+function downloadICS(){
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buildICS()],{type:'text/calendar;charset=utf-8'}));
+  a.download='obzory-2026-muj-plan.ics';document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast('Soubor .ics stažen');
+}
+function openCal(){
+  openSheetFn('Do kalendáře',()=>{
+    const items=planItemsSorted();if(!items.length)return '<p class="hint">Plán je prázdný.</p>';
+    const all=EMBEDDED
+      ?`<p class="hint">Celý plán jako soubor .ics stáhneš na veřejné verzi stránky: <a href="${shareURL()}" target="_blank" rel="noopener">otevřít plán na bremondr.github.io ↗</a></p>`
+      :`<button class="btn" data-act="ics">Stáhnout celý plán (.ics)</button><p class="hint" style="margin-top:6px">Google Kalendář na počítači: Nastavení → Import a export → Importovat. Na telefonu soubor otevři a vyber kalendář. Funguje i v Apple a Outlook kalendáři.</p>`;
+    let h=`<div class="calall">${all}</div><div class="flexhead">Nebo po jednom do Google Kalendáře</div>`,lastD;
+    for(const it of items){
+      if(it.day!==lastD){lastD=it.day;h+=`<div class="calday">${DAYS.find(d=>d.k===it.day).long}</div>`}
+      h+=`<div class="calrow"><span class="mark t-${it.t}"></span><div class="calmain"><b class="num">${it.all?'celý den':fmt(it.start)+'–'+fmt(it.end)}</b> ${esc(it.title)}<span>${esc(locText(it))}</span></div><a class="btn ghost small" href="${esc(gcalURL(it))}" target="_blank" rel="noopener">Přidat ↗</a></div>`;
+    }
+    return h+'<p class="hint">Každé „Přidat“ otevře Google Kalendář s předvyplněnou událostí, stačí ji uložit.</p>';
+  });
+}
+
 const STAR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1L3.2 9.6l6.1-.8z"/></svg>';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -1013,7 +1083,7 @@ function renderPlan(){
     h+='</section>';
   }
   const head=`<div class="planhead"><strong class="num">${all.length}</strong><span>${all.length===1?'bod':all.length<5?'body':'bodů'} v plánu</span>${nClash?`<span class="badge bad">${nClash} ${nClash===1?'kolize':'kolize'}</span>`:'<span class="badge" style="background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green)">bez kolizí</span>'}</div>`;
-  const acts=`<div class="actions"><button class="btn" data-act="copy">Zkopírovat jako text</button><button class="btn ghost" data-act="share">Sdílet odkazem</button><button class="btn danger" data-act="clear">Vymazat plán</button></div>${st.copyText!==null?`<textarea class="copybox" id="copybox" readonly>${esc(st.copyText)}</textarea>`:''}${st.confirmClear?`<div class="banner"><p>Opravdu smazat celý plán?</p><button class="btn" data-act="clearyes">Smazat</button><button class="btn ghost" data-act="clearno">Ponechat</button></div>`:''}`;
+  const acts=`<div class="actions"><button class="btn" data-act="copy">Zkopírovat jako text</button><button class="btn ghost" data-act="share">Sdílet odkazem</button><button class="btn ghost" data-act="cal">Do kalendáře</button><button class="btn danger" data-act="clear">Vymazat plán</button></div>${st.copyText!==null?`<textarea class="copybox" id="copybox" readonly>${esc(st.copyText)}</textarea>`:''}${st.confirmClear?`<div class="banner"><p>Opravdu smazat celý plán?</p><button class="btn" data-act="clearyes">Smazat</button><button class="btn ghost" data-act="clearno">Ponechat</button></div>`:''}`;
   return head+acts+h;
 }
 
@@ -1105,15 +1175,10 @@ document.addEventListener('click',e=>{
     const d=b.closest('.pday');const dk=DAYS.find(x=>d&&d.querySelector('h2').textContent===x.long);
     openSheet(suggestionsFor(dk?dk.k:st.day,a,bb),`Konzultace ${fmt(a)}–${fmt(bb)}`);return}
   if(act==='close'){closeSheet();return}
-  if(act==='copy'){
-    const txt=planText();
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(txt).then(()=>toast('Plán zkopírován')).catch(()=>{st.copyText=txt;render();const c=$('#copybox');c&&c.select()});
-    } else {st.copyText=txt;render();const c=$('#copybox');c&&c.select()}
-    return}
-  if(act==='share'){
-    location.hash='plan-'+[...st.plan].join('-');
-    toast('Plán je v odkazu stránky. Zkopíruj adresu nebo použij Sdílet.');return}
+  if(act==='copy'){copyOut(planText(),'Plán zkopírován jako text');return}
+  if(act==='share'){copyOut(shareURL(),'Odkaz na plán zkopírován');return}
+  if(act==='cal'){openCal();return}
+  if(act==='ics'){downloadICS();return}
   if(act==='clear'){st.confirmClear=true;render();return}
   if(act==='clearno'){st.confirmClear=false;render();return}
   if(act==='clearyes'){st.plan.clear();st.confirmClear=false;st.copyText=null;save();render();toast('Plán smazán');return}
