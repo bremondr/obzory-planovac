@@ -29,6 +29,7 @@
   --danger:#F28479; --warn-bg:#3A2F12; --warn-ink:#F5D98A; --sea:#141B17; --land:#29332C; --land-edge:#3B473F; --wall:#93A39A; --room:#D9B02E; --zone:#4277B3; color-scheme:dark }
 
 *{box-sizing:border-box}
+html{scrollbar-gutter:stable}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
@@ -62,7 +63,7 @@ header.top::after{content:"";position:absolute;inset:-40px -60px auto auto;width
 .t-se{--c:var(--violet)} .t-fi{--c:var(--slate)} .t-ja{--c:var(--clay)}
 
 /* sticky bar */
-.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;border-bottom:1px solid var(--line);
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--bg);box-shadow:0 0 0 100vmax var(--bg);clip-path:inset(0 -100vmax);padding-block:8px;border-bottom:1px solid var(--line);
   display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
 .seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
 .seg button{border:0;background:none;padding:7px 11px;border-radius:7px;cursor:pointer;font-weight:600;font-size:14px;white-space:nowrap}
@@ -119,10 +120,12 @@ header.top::after{content:"";position:absolute;inset:-40px -60px auto auto;width
 .empty{padding:40px 0;text-align:center;color:var(--muted)}
 
 /* grid */
-.gridwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-top:12px}
+.gridwrap{overflow-x:auto;overflow-y:hidden;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-top:12px;max-width:none}
+.gridwrap.fits{overflow:visible}
+.gridwrap.fits .ghead{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--barh,60px));z-index:4;background:var(--surface);border-bottom:1px solid var(--line);border-radius:10px 10px 0 0}
+.ghead .glabel{z-index:5;border-radius:10px 0 0 0}
 .gtable{position:relative}
 .grow{position:relative;display:flex;border-top:1px solid var(--line)}
-body[data-view="grid"] .wrap{max-width:none}
 .glabel{position:sticky;left:0;z-index:2;width:var(--lw,118px);flex:none;background:var(--surface);border-right:1px solid var(--line);padding:6px 8px;font-size:12.5px;font-weight:600;line-height:1.2}
 .glabel span{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
 .gtrack{position:relative;flex:none}
@@ -138,7 +141,8 @@ body[data-view="grid"] .wrap{max-width:none}
 /* map */
 .maptools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
 .maptools .seg button{font-size:13px;padding:6px 10px}
-.mapbox{position:relative;margin-top:10px;height:clamp(320px,58vh,560px);border:1px solid var(--line);border-radius:10px;background:var(--sea);overflow:hidden}
+/* map fills the screen below the sticky bar, but never taller than ~60 % of its width */
+.mapbox{position:relative;margin-top:10px;height:clamp(360px,calc(100vh - var(--barh,60px) - 28px),calc(var(--bleedw,100vw) * .6));height:clamp(360px,calc(100dvh - var(--barh,60px) - 28px),calc(var(--bleedw,100vw) * .6));border:1px solid var(--line);border-radius:10px;background:var(--sea);overflow:hidden}
 .mapbox .msg{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px;text-align:center;padding:16px}
 .legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted);margin-top:8px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:5px;background:var(--ink);box-shadow:0 0 0 1.5px var(--surface)}
@@ -689,9 +693,9 @@ function renderGrid(){
   if(!items.length)return `<div class="empty">Nic neodpovídá filtru.</div>`;
   const t0=Math.floor(Math.min(...items.map(i=>i.start))/60)*60, t1=Math.ceil(Math.max(...items.map(i=>i.end))/60)*60;
   // stretch the day across the available width; below a readable minimum the timeline scrolls sideways
-  const narrow=innerWidth<560, LW=narrow?92:118, avail=($('#out').clientWidth||900)-LW-2;
+  const narrow=innerWidth<560, LW=narrow?92:118, avail=LAY.w-LW-2;
   const PPM=Math.max(narrow?2:1.4,avail/(t1-t0));
-  const W=Math.floor((t1-t0)*PPM);
+  const W=Math.floor((t1-t0)*PPM), fits=W<=avail;
   // rows by place; consultations aggregated per place+slot
   const rows=new Map(); gridGroups={};
   for(const it of items){
@@ -708,7 +712,7 @@ function renderGrid(){
   const keys=[...rows.keys()].sort((a,b)=>fk(a)-fk(b)||rank(a)-rank(b)||a.localeCompare(b,'cs'));
   let ticks='',heads='';
   for(let t=t0;t<=t1;t+=60){const x=(t-t0)*PPM;ticks+=`<div class="gtick" style="left:${x}px"></div>`;if(t<t1)heads+=`<div style="left:${x}px">${t/60}:00</div>`}
-  let h=`<div class="gridwrap"><div class="gtable" style="width:${W+LW}px;--lw:${LW}px">
+  let h=`<div class="gridwrap bleed${fits?' fits':''}"><div class="gtable" style="width:${W+LW}px;--lw:${LW}px">
     <div class="grow ghead" style="border-top:0;height:28px"><div class="glabel" style="padding:6px 8px"></div><div class="gtrack" style="width:${W}px">${heads}</div></div>`;
   let lastF;
   for(const k of keys){
@@ -729,7 +733,7 @@ function renderGrid(){
     }
     h+='</div></div>';
   }
-  return h+`</div></div><p class="hint">Posuň do strany pro celý den. Ťukni na blok pro detail a přidání do plánu. Celodenní body najdeš v seznamu.</p>`;
+  return h+`</div></div><p class="hint">${fits?'':'Posuň do strany pro celý den. '}Ťukni na blok pro detail a přidání do plánu. Celodenní body najdeš v seznamu.</p>`;
 }
 
 /* ---------- world map: own simplified SVG (no third-party services) ---------- */
@@ -793,7 +797,7 @@ function renderMap(){
   return `<div class="maptools"><div class="seg" role="group" aria-label="Rozsah mapy">
       <button data-act="mapday" aria-pressed="${!st.mapAll}">${dayName}</button><button data-act="mapall" aria-pressed="${!!st.mapAll}">Celý víkend</button></div>
       <span class="hint" style="margin:0">${dests.length} míst · ${scope.length-none} bodů programu</span></div>
-    <div class="mapbox">
+    <div class="mapbox bleed">
       <svg id="worldsvg" viewBox="${WORLD.x} ${WORLD.y} ${WORLD.w} ${WORLD.h}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Mapa světa s místy z programu">
         <rect x="-400" y="-300" width="1160" height="780" class="sea"/>
         <path class="grat" d="${grat}"/>
@@ -861,7 +865,10 @@ function openPlace(keys,title){
 }
 let rsT,rsW=innerWidth;
 window.addEventListener('resize',()=>{worldCtl&&worldCtl.apply();
-  if(st.view==='grid'&&innerWidth!==rsW){clearTimeout(rsT);rsT=setTimeout(()=>{rsW=innerWidth;const g=$('.gridwrap'),sl=g?g.scrollLeft:0;render();const n=$('.gridwrap');if(n)n.scrollLeft=sl},150)}});
+  if(innerWidth===rsW){layoutVars();return}
+  clearTimeout(rsT);rsT=setTimeout(()=>{rsW=innerWidth;
+    if(st.view==='grid'||st.view==='map'){const g=$('.gridwrap'),sl=g?g.scrollLeft:0;render();const n=$('.gridwrap');if(n)n.scrollLeft=sl}
+    else layoutVars()},150)});
 
 /* ---------- venue plan (FF UK, nám. Jana Palacha 2), drawn after the festival's floor plan ---------- */
 const VENUE={
@@ -1030,11 +1037,26 @@ function renderChrome(){
   $('#floors').innerHTML=`<span class="lbl">Patro</span>`+[[0,'Všechna'],[1,'1. patro'],[2,'2. patro'],[3,'3. patro']].map(([f,l])=>`<button class="chip fchip" data-floor="${f}" aria-pressed="${(st.floor||0)===f}">${l}</button>`).join('');
   $('#filters').hidden=st.view==='plan';
 }
+/* page geometry: sticky bar height and the full content width between the side gutters */
+let LAY={w:900,gl:16,gr:16};
+function layoutVars(){
+  const root=document.documentElement,b=$('.bar'),cs=getComputedStyle(document.body);
+  const gl=parseFloat(cs.paddingLeft)||16,gr=parseFloat(cs.paddingRight)||16,vw=root.clientWidth;
+  LAY={w:vw-gl-gr,gl,gr};
+  root.style.setProperty('--barh',(b?b.offsetHeight:60)+'px');
+  root.style.setProperty('--bleedw',LAY.w+'px');
+}
+function applyBleed(){
+  document.querySelectorAll('.bleed').forEach(el=>{const p=el.parentElement.getBoundingClientRect();
+    el.style.width=LAY.w+'px';el.style.marginLeft=(LAY.gl-p.left)+'px'});
+}
 function render(){
   renderChrome();
+  layoutVars();
   const V={list:renderList,grid:renderGrid,venue:renderVenue,map:renderMap,plan:renderPlan};
   document.body.dataset.view=st.view;
   $('#out').innerHTML=(V[st.view]||renderList)();
+  applyBleed();
   if(st.view==='map')setupWorld();else worldCtl=null;
 }
 
