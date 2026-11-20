@@ -122,7 +122,8 @@ header.top::after{content:"";position:absolute;inset:-40px -60px auto auto;width
 .gridwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-top:12px}
 .gtable{position:relative}
 .grow{position:relative;display:flex;border-top:1px solid var(--line)}
-.glabel{position:sticky;left:0;z-index:2;width:118px;flex:none;background:var(--surface);border-right:1px solid var(--line);padding:6px 8px;font-size:12.5px;font-weight:600;line-height:1.2}
+body[data-view="grid"] .wrap{max-width:none}
+.glabel{position:sticky;left:0;z-index:2;width:var(--lw,118px);flex:none;background:var(--surface);border-right:1px solid var(--line);padding:6px 8px;font-size:12.5px;font-weight:600;line-height:1.2}
 .glabel span{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
 .gtrack{position:relative;flex:none}
 .gtick{position:absolute;top:0;bottom:0;border-left:1px solid var(--line);opacity:.6}
@@ -141,7 +142,6 @@ header.top::after{content:"";position:absolute;inset:-40px -60px auto auto;width
 .mapbox .msg{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px;text-align:center;padding:16px}
 .legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted);margin-top:8px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:5px;background:var(--ink);box-shadow:0 0 0 1.5px var(--surface)}
-.legend i.on{background:var(--red)}
 .legend i.sq{border-radius:1px;background:var(--sea);box-shadow:inset 0 0 0 2px var(--red)}
 .mapbox svg{width:100%;height:100%;display:block;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
 .mapbox svg.dragging{cursor:grabbing}
@@ -149,9 +149,17 @@ header.top::after{content:"";position:absolute;inset:-40px -60px auto auto;width
 .mapbox .grat{fill:none;stroke:var(--line);stroke-width:.6;vector-effect:non-scaling-stroke;opacity:.7}
 .mapbox .land{fill:var(--land);stroke:var(--land-edge);stroke-width:.8;vector-effect:non-scaling-stroke;stroke-linejoin:round}
 .pin{cursor:pointer;outline:none}
-.pin circle{fill:var(--ink);stroke:var(--surface);stroke-width:1.5;fill-opacity:.88}
-.pin.on circle{fill:var(--red);fill-opacity:1}
-.pin:focus-visible circle{stroke:var(--blue);stroke-width:3}
+.pin .solid{fill:var(--c)}
+.pin .seg{fill:none;stroke:var(--c)}
+.pin .rim{fill:none;stroke:var(--surface);stroke-width:1.5}
+.pin .ring{fill:none;stroke:var(--ink);stroke-width:2.5}
+.pin.on text{font-weight:700}
+.pin:focus-visible .rim{stroke:var(--blue);stroke-width:3}
+.legend i[class^="t-"]{background:var(--c)}
+.legend i.pie{background:conic-gradient(var(--red) 0 40%,var(--yellow) 0 75%,var(--green) 0)}
+.legend i.ringi{background:transparent;box-shadow:inset 0 0 0 2.5px var(--ink)}
+.tdots{display:inline-flex;gap:2px}
+.tdots i{width:8px;height:8px;border-radius:50%;background:var(--c)}
 .pin text{display:none;font:600 11px var(--f-body);fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
 .zoomed .pin text,.pin.on text,.pin.home text{display:block}
 .pin.home{cursor:default}
@@ -207,7 +215,7 @@ header.top::after{content:"";position:absolute;inset:-40px -60px auto auto;width
 .dest{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 10px;font-size:13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
 .dest b{font-weight:600}
 .dest .n{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px}
-.dest.on{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}
+.dest.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 
 /* plan */
 .pday{margin-top:18px}
@@ -679,9 +687,11 @@ let gridGroups={};
 function renderGrid(){
   const items=filtered().filter(i=>!i.all);
   if(!items.length)return `<div class="empty">Nic neodpovídá filtru.</div>`;
-  const PPM=2.2;
   const t0=Math.floor(Math.min(...items.map(i=>i.start))/60)*60, t1=Math.ceil(Math.max(...items.map(i=>i.end))/60)*60;
-  const W=(t1-t0)*PPM;
+  // stretch the day across the available width; below a readable minimum the timeline scrolls sideways
+  const narrow=innerWidth<560, LW=narrow?92:118, avail=($('#out').clientWidth||900)-LW-2;
+  const PPM=Math.max(narrow?2:1.4,avail/(t1-t0));
+  const W=Math.floor((t1-t0)*PPM);
   // rows by place; consultations aggregated per place+slot
   const rows=new Map(); gridGroups={};
   for(const it of items){
@@ -698,7 +708,7 @@ function renderGrid(){
   const keys=[...rows.keys()].sort((a,b)=>fk(a)-fk(b)||rank(a)-rank(b)||a.localeCompare(b,'cs'));
   let ticks='',heads='';
   for(let t=t0;t<=t1;t+=60){const x=(t-t0)*PPM;ticks+=`<div class="gtick" style="left:${x}px"></div>`;if(t<t1)heads+=`<div style="left:${x}px">${t/60}:00</div>`}
-  let h=`<div class="gridwrap"><div class="gtable" style="width:${W+118}px">
+  let h=`<div class="gridwrap"><div class="gtable" style="width:${W+LW}px;--lw:${LW}px">
     <div class="grow ghead" style="border-top:0;height:28px"><div class="glabel" style="padding:6px 8px"></div><div class="gtrack" style="width:${W}px">${heads}</div></div>`;
   let lastF;
   for(const k of keys){
@@ -706,7 +716,7 @@ function renderGrid(){
     for(const it of arr){let l=lanes.findIndex(e=>e<=it.start);if(l<0){l=lanes.length;lanes.push(0)}lanes[l]=it.end;it._lane=l}
     const H=lanes.length*40+8;
     const fl=floorOf(k);
-    if(fl!==lastF){lastF=fl;h+=`<div class="gfloor" style="width:${W+118}px"><span>${fl?flBadge(fl)+` ${fl}. patro`:'Patro neuvedeno'}</span></div>`}
+    if(fl!==lastF){lastF=fl;h+=`<div class="gfloor" style="width:${W+LW}px"><span>${fl?flBadge(fl)+` ${fl}. patro`:'Patro neuvedeno'}</span></div>`}
     const r=roomOf(k.startsWith('—')?'':k);
     const lab=`${esc(r.room.replace(/^sál/,'Sál'))}${r.name?`<span>${esc(r.name)}</span>`:''}`;
     h+=`<div class="grow" style="height:${H}px"><div class="glabel">${lab}</div><div class="gtrack" style="width:${W}px;height:${H}px">${ticks}`;
@@ -762,6 +772,8 @@ const PRJ=(lon,lat)=>[+(lon+180).toFixed(2),+(90-lat).toFixed(2)];
 const LAND_D=LAND.map(p=>'M'+p.map(([lo,la])=>PRJ(lo,la).join(' ')).join('L')+'Z').join('');
 const WORLD={x:0,y:6,w:360,h:142};
 let mapAgg=new Map(),mapVB=null,worldCtl=null;
+const TORDER=Object.keys(TYPES);
+function typeCounts(arr){const m={};for(const i of arr)m[i.t]=(m[i.t]||0)+1;return TORDER.filter(t=>m[t]).map(t=>[t,m[t]])}
 function mapScope(){return ITEMS.filter(it=>(st.mapAll||it.day===st.day)&&matches(it))}
 function renderMap(){
   const scope=mapScope();mapAgg=new Map();let none=0;
@@ -771,8 +783,13 @@ function renderMap(){
   let grat='';for(let x=0;x<=360;x+=30)grat+=`M${x} 0V180`;for(let y=30;y<180;y+=30)grat+=`M0 ${y}H360`;
   const [hx,hy]=PRJ(14.42,50.08);
   // smaller pins on top
-  const pins=dests.map(([k,arr])=>{const [x,y]=PRJ(PL[k][2],PL[k][1]),n=arr.length,on=arr.some(i=>st.plan.has(i.id)),r=(4+2.6*Math.sqrt(n)).toFixed(1);
-    return `<g class="pin${on?' on':''}" data-k="${k}" data-x="${x}" data-y="${y}" transform="translate(${x} ${y})" tabindex="0" role="button" aria-label="${esc(PL[k][0])}: ${n}"><circle r="${r}"/><text x="${+r+3}" y="4">${esc(PL[k][0])}</text></g>`}).join('');
+  // each pin is a small pie: slices = share of event types at that place, colored like the filter chips
+  const pins=dests.map(([k,arr])=>{const [x,y]=PRJ(PL[k][2],PL[k][1]),n=arr.length,on=arr.some(i=>st.plan.has(i.id)),R=4+2.6*Math.sqrt(n);
+    const tc=typeCounts(arr),C=Math.PI*R;let acc=0,body='';
+    if(tc.length===1)body=`<circle class="solid t-${tc[0][0]}" r="${R.toFixed(1)}"/>`;
+    else for(const [t,c] of tc){const len=c/n*C;body+=`<circle class="seg t-${t}" r="${(R/2).toFixed(2)}" stroke-width="${R.toFixed(2)}" stroke-dasharray="${len.toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-acc).toFixed(2)}" transform="rotate(-90)"/>`;acc+=len}
+    const lab=`${PL[k][0]}: ${tc.map(([t,c])=>`${c}× ${TYPE1[t].toLowerCase()}`).join(', ')}`;
+    return `<g class="pin${on?' on':''}" data-k="${k}" data-x="${x}" data-y="${y}" transform="translate(${x} ${y})" tabindex="0" role="button" aria-label="${esc(lab)}"><title>${esc(lab)}</title>${on?`<circle class="ring" r="${(R+3.5).toFixed(1)}"/>`:''}${body}<circle class="rim" r="${R.toFixed(1)}"/><text x="${(R+(on?6:3)).toFixed(1)}" y="4">${esc(PL[k][0])}</text></g>`}).join('');
   return `<div class="maptools"><div class="seg" role="group" aria-label="Rozsah mapy">
       <button data-act="mapday" aria-pressed="${!st.mapAll}">${dayName}</button><button data-act="mapall" aria-pressed="${!!st.mapAll}">Celý víkend</button></div>
       <span class="hint" style="margin:0">${dests.length} míst · ${scope.length-none} bodů programu</span></div>
@@ -786,8 +803,9 @@ function renderMap(){
       </svg>
       <div class="mapctl"><button data-act="zin" aria-label="Přiblížit">+</button><button data-act="zout" aria-label="Oddálit">−</button><button data-act="zreset" aria-label="Celý svět">⟲</button></div>
     </div>
-    <div class="legend"><span><i></i>téma programu (větší = víc bodů)</span><span><i class="on"></i>máš v plánu</span><span><i class="sq"></i>Obzory, Praha</span><span>Táhni, kolečkem nebo prsty přibliž, ťukni na bod.</span></div>
-    <div class="dests">${dests.map(([k,arr])=>`<button class="dest ${arr.some(i=>st.plan.has(i.id))?'on':''}" data-act="place" data-k="${k}"><b>${esc(PL[k][0])}</b><span class="n">${arr.length}</span></button>`).join('')||'<span class="hint">Žádné místo neodpovídá filtru.</span>'}</div>
+    <div class="legend">${[...new Set(scope.filter(i=>i.dest.length).map(i=>i.t))].sort((a,b)=>TORDER.indexOf(a)-TORDER.indexOf(b)).map(t=>`<span><i class="t-${t}"></i>${TYPES[t]}</span>`).join('')}</div>
+    <div class="legend"><span><i class="pie"></i>výseče = poměr typů, větší = víc bodů</span><span><i class="ringi"></i>máš v plánu</span><span><i class="sq"></i>Obzory, Praha</span><span>Táhni, kolečkem nebo prsty přibliž, ťukni na bod.</span></div>
+    <div class="dests">${dests.map(([k,arr])=>`<button class="dest ${arr.some(i=>st.plan.has(i.id))?'on':''}" data-act="place" data-k="${k}"><span class="tdots">${typeCounts(arr).map(([t])=>`<i class="t-${t}"></i>`).join('')}</span><b>${esc(PL[k][0])}</b><span class="n">${arr.length}</span></button>`).join('')||'<span class="hint">Žádné místo neodpovídá filtru.</span>'}</div>
     <p class="hint">${none} ${none===1?'bod nemá':none<5?'body nemají':'bodů nemá'} konkrétní místo (výbava, první pomoc, setkání…), najdeš je v seznamu. Místa jsou přiřazená podle názvu a jsou orientační, mapa je zjednodušená.</p>`;
 }
 function setupWorld(){
@@ -841,7 +859,9 @@ function openPlace(keys,title){
   items.sort((a,b)=>order[a.day]-order[b.day]||a.start-b.start);
   openSheet(items,title,!!st.mapAll);
 }
-window.addEventListener('resize',()=>worldCtl&&worldCtl.apply());
+let rsT,rsW=innerWidth;
+window.addEventListener('resize',()=>{worldCtl&&worldCtl.apply();
+  if(st.view==='grid'&&innerWidth!==rsW){clearTimeout(rsT);rsT=setTimeout(()=>{rsW=innerWidth;const g=$('.gridwrap'),sl=g?g.scrollLeft:0;render();const n=$('.gridwrap');if(n)n.scrollLeft=sl},150)}});
 
 /* ---------- venue plan (FF UK, nám. Jana Palacha 2), drawn after the festival's floor plan ---------- */
 const VENUE={
@@ -1013,6 +1033,7 @@ function renderChrome(){
 function render(){
   renderChrome();
   const V={list:renderList,grid:renderGrid,venue:renderVenue,map:renderMap,plan:renderPlan};
+  document.body.dataset.view=st.view;
   $('#out').innerHTML=(V[st.view]||renderList)();
   if(st.view==='map')setupWorld();else worldCtl=null;
 }
