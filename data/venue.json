@@ -1,0 +1,376 @@
+{
+ "_info": "Plánek budovy, souřadnice v rámečku 400×310. k: room | zone | stolky | label, a: popisek (řádky jako pole), b: číslo sálu, v: svislý popisek. placeRules přiřazují texty z pole „misto“ k zónám; „sál NNN“ se páruje se zónou rNNN automaticky.",
+ "floors": {
+  "1": {
+   "outline": "M30 70 H240 V22 H370 V300 H30 Z",
+   "inner": "M96 112 H294 V276 H96 Z",
+   "stairs": [
+    176,
+    124
+   ],
+   "wc": [
+    [
+     52,
+     286
+    ],
+    [
+     348,
+     286
+    ]
+   ],
+   "zones": [
+    {
+     "id": "r104",
+     "k": "room",
+     "x": 248,
+     "y": 28,
+     "w": 114,
+     "h": 40,
+     "a": "Horo-akademie",
+     "b": "sál 104"
+    },
+    {
+     "id": "c1",
+     "k": "zone",
+     "x": 44,
+     "y": 80,
+     "w": 312,
+     "h": 20,
+     "a": "Nákupy a workshopy na chodbě"
+    },
+    {
+     "id": "s1",
+     "k": "zone",
+     "x": 116,
+     "y": 174,
+     "w": 158,
+     "h": 18,
+     "a": "Posezení, stánky"
+    },
+    {
+     "id": "r131",
+     "k": "room",
+     "x": 112,
+     "y": 202,
+     "w": 166,
+     "h": 62,
+     "a": "Sál Svět outdooru",
+     "b": "aula 131"
+    }
+   ]
+  },
+  "2": {
+   "outline": "M30 22 H370 V300 H30 Z",
+   "inner": "M96 116 H304 V246 H96 Z",
+   "stairs": [
+    184,
+    130
+   ],
+   "wc": [
+    [
+     132,
+     290
+    ],
+    [
+     268,
+     290
+    ]
+   ],
+   "zones": [
+    {
+     "id": "r200",
+     "k": "room",
+     "x": 76,
+     "y": 30,
+     "w": 132,
+     "h": 44,
+     "a": "Sál Kolumbus",
+     "b": "sál 200"
+    },
+    {
+     "id": "r201",
+     "k": "room",
+     "x": 248,
+     "y": 30,
+     "w": 106,
+     "h": 44,
+     "a": "Sál Setkávání",
+     "b": "sál 201"
+    },
+    {
+     "id": "c2",
+     "k": "zone",
+     "x": 58,
+     "y": 86,
+     "w": 270,
+     "h": 20,
+     "a": "Nákupy, restaurace a workshopy"
+    },
+    {
+     "id": "c2l",
+     "k": "zone",
+     "x": 58,
+     "y": 116,
+     "w": 20,
+     "h": 118,
+     "a": "Nákupy a restaurace",
+     "v": 1
+    },
+    {
+     "id": "c2r",
+     "k": "zone",
+     "x": 322,
+     "y": 116,
+     "w": 20,
+     "h": 118,
+     "a": "Nákupy a restaurace",
+     "v": 1
+    },
+    {
+     "id": "c2b",
+     "k": "zone",
+     "x": 120,
+     "y": 256,
+     "w": 160,
+     "h": 18,
+     "a": "Nákupy a restaurace"
+    },
+    {
+     "id": "r217",
+     "k": "room",
+     "x": 22,
+     "y": 244,
+     "w": 88,
+     "h": 50,
+     "a": [
+      "Horo-akademie",
+      "a workshopy"
+     ],
+     "b": "sál 217"
+    },
+    {
+     "id": "r209",
+     "k": "room",
+     "x": 290,
+     "y": 244,
+     "w": 88,
+     "h": 50,
+     "a": [
+      "Horo-akademie",
+      "a workshopy"
+     ],
+     "b": "sál 209"
+    },
+    {
+     "k": "label",
+     "x": 338,
+     "y": 82,
+     "a": "fotostěna"
+    }
+   ]
+  },
+  "3": {
+   "outline": "M30 22 H340 V300 H30 Z",
+   "inner": "M108 128 H298 V260 H108 Z",
+   "stairs": [
+    186,
+    142
+   ],
+   "wc": [
+    [
+     122,
+     290
+    ],
+    [
+     300,
+     290
+    ]
+   ],
+   "zones": [
+    {
+     "id": "r325",
+     "k": "room",
+     "x": 34,
+     "y": 44,
+     "w": 66,
+     "h": 44,
+     "a": "Konzultace",
+     "b": "sál 325"
+    },
+    {
+     "id": "r326",
+     "k": "room",
+     "x": 104,
+     "y": 28,
+     "w": 58,
+     "h": 44,
+     "a": "Konzultace",
+     "b": "sál 326"
+    },
+    {
+     "id": "r300",
+     "k": "room",
+     "x": 166,
+     "y": 28,
+     "w": 88,
+     "h": 48,
+     "a": [
+      "Sál Hedvábná",
+      "stezka"
+     ],
+     "b": "sál 300"
+    },
+    {
+     "id": "r301",
+     "k": "room",
+     "x": 258,
+     "y": 28,
+     "w": 76,
+     "h": 48,
+     "a": "Sál Dobrodruh",
+     "b": "sál 301"
+    },
+    {
+     "id": "f3",
+     "k": "zone",
+     "x": 186,
+     "y": 82,
+     "w": 100,
+     "h": 14,
+     "a": "Společné focení"
+    },
+    {
+     "id": "c3",
+     "k": "zone",
+     "x": 106,
+     "y": 102,
+     "w": 226,
+     "h": 18,
+     "a": "Nákupy, restaurace a workshopy"
+    },
+    {
+     "id": "d3",
+     "k": "zone",
+     "x": 146,
+     "y": 196,
+     "w": 116,
+     "h": 16,
+     "a": "Druhá fuska challenge"
+    },
+    {
+     "id": "k3",
+     "k": "stolky",
+     "x": 308,
+     "y": 128,
+     "w": 16,
+     "h": 126,
+     "a": "Konzultace – stolky",
+     "v": 1
+    },
+    {
+     "id": "k3b",
+     "k": "stolky",
+     "x": 142,
+     "y": 268,
+     "w": 148,
+     "h": 14,
+     "a": "Konzultace – stolky"
+    },
+    {
+     "id": "r304",
+     "k": "room",
+     "x": 344,
+     "y": 140,
+     "w": 52,
+     "h": 44,
+     "a": [
+      "Komorní",
+      "sál"
+     ],
+     "b": "sál 304"
+    },
+    {
+     "id": "r308",
+     "k": "room",
+     "x": 344,
+     "y": 204,
+     "w": 52,
+     "h": 44,
+     "a": "Filmy",
+     "b": "sál 308"
+    },
+    {
+     "id": "r317",
+     "k": "room",
+     "x": 24,
+     "y": 248,
+     "w": 86,
+     "h": 48,
+     "a": [
+      "Horo-akademie",
+      "a workshopy"
+     ],
+     "b": "sál 317"
+    }
+   ]
+  }
+ },
+ "groups": [
+  [
+   "c2",
+   "c2l",
+   "c2r",
+   "c2b"
+  ],
+  [
+   "k3",
+   "k3b"
+  ],
+  [
+   "c1",
+   "s1"
+  ]
+ ],
+ "placeRules": [
+  {
+   "match": "stolky",
+   "zones": [
+    "k3",
+    "k3b"
+   ]
+  },
+  {
+   "match": "bushman",
+   "zones": [
+    "f3"
+   ]
+  },
+  {
+   "match": "snidane|2\\. patro",
+   "zones": [
+    "c2",
+    "c2l",
+    "c2r",
+    "c2b"
+   ]
+  },
+  {
+   "match": "1\\. patro",
+   "zones": [
+    "c1",
+    "s1"
+   ]
+  },
+  {
+   "match": "3\\. patro",
+   "zones": [
+    "c3"
+   ]
+  }
+ ],
+ "roomLabels": {
+  "stolky": "stolky na chodbě",
+  "chodba": "hlavní chodba",
+  "snídaně": "snídaně u Kávík Coffee"
+ }
+}

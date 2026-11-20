@@ -1,0 +1,45 @@
+{
+ "name": "Festival Obzory",
+ "title": "Obzory 2026",
+ "subtitle": "můj plán",
+ "venueLine": "Festival Obzory · FF UK, nám. Jana Palacha 2 · metro A Staroměstská",
+ "address": "Filozofická fakulta UK, nám. Jana Palacha 2, Praha 1",
+ "datesText": "6.–8. 11. 2026",
+ "storageKey": "obzory26",
+ "publicUrl": "https://bremondr.github.io/obzory-planovac/",
+ "sourceUrl": "https://festivalobzory.cz/program/",
+ "sourceLabel": "festivalobzory.cz/program",
+ "dataAsOf": "20. 11. 2026",
+ "nextEdition": "12.–14. 11. 2027",
+ "defaultDay": "so",
+ "days": [
+  {
+   "key": "pa",
+   "short": "Pá 6.",
+   "long": "Pátek 6. 11.",
+   "date": "2026-11-06"
+  },
+  {
+   "key": "so",
+   "short": "So 7.",
+   "long": "Sobota 7. 11.",
+   "date": "2026-11-07"
+  },
+  {
+   "key": "ne",
+   "short": "Ne 8.",
+   "long": "Neděle 8. 11.",
+   "date": "2026-11-08"
+  }
+ ],
+ "halls": {
+  "104": "Obzory",
+  "131": "Svět outdooru",
+  "200": "Kolumbus",
+  "201": "Pádler",
+  "300": "Hedvábná stezka",
+  "301": "Dobrodruh",
+  "304": "Komorní sál",
+  "308": "Filmy"
+ }
+}

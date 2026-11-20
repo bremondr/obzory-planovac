@@ -1,0 +1,862 @@
+{
+ "_info": "Místa na mapě světa. \"rules\": regulární výraz se hledá v názvu bodu programu (malými písmeny, bez diakritiky) a přiřadí mu místo podle klíče.",
+ "places": {
+  "nepal": {
+   "label": "Nepál",
+   "lat": 28.2,
+   "lon": 84.1
+  },
+  "norsko": {
+   "label": "Norsko",
+   "lat": 61.5,
+   "lon": 9
+  },
+  "tenerife": {
+   "label": "Tenerife",
+   "lat": 28.27,
+   "lon": -16.6
+  },
+  "kanary": {
+   "label": "Kanárské ostrovy",
+   "lat": 28.1,
+   "lon": -15.4
+  },
+  "vietnam": {
+   "label": "Vietnam",
+   "lat": 16,
+   "lon": 107.8
+  },
+  "mekong": {
+   "label": "Delta Mekongu",
+   "lat": 10,
+   "lon": 105.8
+  },
+  "aconcagua": {
+   "label": "Aconcagua",
+   "lat": -32.65,
+   "lon": -70.01
+  },
+  "argentina": {
+   "label": "Argentina",
+   "lat": -36,
+   "lon": -64
+  },
+  "nz": {
+   "label": "Nový Zéland",
+   "lat": -42,
+   "lon": 172.5
+  },
+  "taiwan": {
+   "label": "Tchaj-wan",
+   "lat": 23.7,
+   "lon": 121
+  },
+  "indonesie": {
+   "label": "Indonésie",
+   "lat": -2,
+   "lon": 118
+  },
+  "bali": {
+   "label": "Bali",
+   "lat": -8.4,
+   "lon": 115.2
+  },
+  "etiopie": {
+   "label": "Etiopie",
+   "lat": 9,
+   "lon": 39.5
+  },
+  "nl": {
+   "label": "Nizozemsko",
+   "lat": 52.2,
+   "lon": 5.3
+  },
+  "turecko": {
+   "label": "Turecko",
+   "lat": 39,
+   "lon": 35
+  },
+  "ekvador": {
+   "label": "Ekvádor",
+   "lat": -1.5,
+   "lon": -78.3
+  },
+  "svycarsko": {
+   "label": "Švýcarsko",
+   "lat": 46.8,
+   "lon": 8.2
+  },
+  "maroko": {
+   "label": "Maroko",
+   "lat": 31.8,
+   "lon": -7
+  },
+  "montblanc": {
+   "label": "Mont Blanc",
+   "lat": 45.83,
+   "lon": 6.86
+  },
+  "australie": {
+   "label": "Austrálie",
+   "lat": -25,
+   "lon": 134
+  },
+  "island": {
+   "label": "Island",
+   "lat": 64.9,
+   "lon": -18.6
+  },
+  "makedonie": {
+   "label": "Severní Makedonie",
+   "lat": 41.6,
+   "lon": 21.7
+  },
+  "albanie": {
+   "label": "Albánie",
+   "lat": 41.1,
+   "lon": 20
+  },
+  "camino": {
+   "label": "Camino de Santiago",
+   "lat": 42.88,
+   "lon": -8.54
+  },
+  "azory": {
+   "label": "Azory",
+   "lat": 37.8,
+   "lon": -25.5
+  },
+  "chile": {
+   "label": "Chile",
+   "lat": -33.5,
+   "lon": -70.7
+  },
+  "indie": {
+   "label": "Indie",
+   "lat": 22,
+   "lon": 79
+  },
+  "jindie": {
+   "label": "Jižní Indie",
+   "lat": 11,
+   "lon": 77
+  },
+  "sindie": {
+   "label": "Severní Indie",
+   "lat": 31,
+   "lon": 77.5
+  },
+  "thajsko": {
+   "label": "Thajsko",
+   "lat": 15,
+   "lon": 101
+  },
+  "pyreneje": {
+   "label": "Pyreneje (HRP)",
+   "lat": 42.7,
+   "lon": 0.5
+  },
+  "colorado": {
+   "label": "Colorado Trail",
+   "lat": 39.2,
+   "lon": -105.9
+  },
+  "alpy": {
+   "label": "Alpy",
+   "lat": 46.5,
+   "lon": 10.5
+  },
+  "apalace": {
+   "label": "Apalačská stezka",
+   "lat": 37.5,
+   "lon": -80
+  },
+  "peru": {
+   "label": "Peru",
+   "lat": -10,
+   "lon": -75
+  },
+  "ausangate": {
+   "label": "Ausangate",
+   "lat": -13.79,
+   "lon": -71.23
+  },
+  "korsika": {
+   "label": "Korsika",
+   "lat": 42.15,
+   "lon": 9.1
+  },
+  "afrika": {
+   "label": "Afrika (více zemí)",
+   "lat": 3,
+   "lon": 22
+  },
+  "camerika": {
+   "label": "Střední Amerika",
+   "lat": 13.5,
+   "lon": -86.5
+  },
+  "irak": {
+   "label": "Irák",
+   "lat": 33,
+   "lon": 44
+  },
+  "skotsko": {
+   "label": "Skotsko",
+   "lat": 57,
+   "lon": -4.5
+  },
+  "bosna": {
+   "label": "Bosna a Hercegovina",
+   "lat": 44,
+   "lon": 17.8
+  },
+  "filipiny": {
+   "label": "Filipíny",
+   "lat": 12,
+   "lon": 122
+  },
+  "dolomity": {
+   "label": "Dolomity",
+   "lat": 46.4,
+   "lon": 11.9
+  },
+  "pct": {
+   "label": "Pacifická hřebenovka",
+   "lat": 41,
+   "lon": -121.5
+  },
+  "usa": {
+   "label": "USA",
+   "lat": 39,
+   "lon": -98
+  },
+  "swusa": {
+   "label": "Utah a Arizona",
+   "lat": 36.5,
+   "lon": -111.5
+  },
+  "aljaska": {
+   "label": "Aljaška",
+   "lat": 64,
+   "lon": -150
+  },
+  "kyrgyzstan": {
+   "label": "Kyrgyzstán",
+   "lat": 41.4,
+   "lon": 74.7
+  },
+  "bolivie": {
+   "label": "Bolívie",
+   "lat": -16.5,
+   "lon": -64.5
+  },
+  "rumunsko": {
+   "label": "Rumunsko",
+   "lat": 45.9,
+   "lon": 25
+  },
+  "gruzie": {
+   "label": "Gruzie",
+   "lat": 42.2,
+   "lon": 43.5
+  },
+  "laponsko": {
+   "label": "Laponsko",
+   "lat": 68,
+   "lon": 24
+  },
+  "spicberky": {
+   "label": "Špicberky",
+   "lat": 78.5,
+   "lon": 16
+  },
+  "himalaj": {
+   "label": "Himálaj",
+   "lat": 30.5,
+   "lon": 80
+  },
+  "portugalsko": {
+   "label": "Portugalsko",
+   "lat": 39.5,
+   "lon": -8
+  },
+  "madeira": {
+   "label": "Madeira",
+   "lat": 32.75,
+   "lon": -17
+  },
+  "venezuela": {
+   "label": "Venezuela",
+   "lat": 6.5,
+   "lon": -66
+  },
+  "llanos": {
+   "label": "Los Llanos",
+   "lat": 7,
+   "lon": -68.5
+  },
+  "nikaragua": {
+   "label": "Nikaragua",
+   "lat": 12.8,
+   "lon": -85.2
+  },
+  "polsko": {
+   "label": "Polsko a Balt",
+   "lat": 54.3,
+   "lon": 18.6
+  },
+  "asie": {
+   "label": "Napříč Asií",
+   "lat": 42,
+   "lon": 70
+  },
+  "korea": {
+   "label": "Jižní Korea",
+   "lat": 36.5,
+   "lon": 127.8
+  },
+  "nigerie": {
+   "label": "Nigérie",
+   "lat": 9,
+   "lon": 8
+  },
+  "cesko": {
+   "label": "Česko",
+   "lat": 49.8,
+   "lon": 15.5
+  },
+  "maledivy": {
+   "label": "Maledivy",
+   "lat": 3.2,
+   "lon": 73.2
+  },
+  "japonsko": {
+   "label": "Japonsko",
+   "lat": 36.2,
+   "lon": 138
+  },
+  "kanada": {
+   "label": "Kanada (Great Divide)",
+   "lat": 51,
+   "lon": -116
+  },
+  "brazilie": {
+   "label": "Brazílie",
+   "lat": -10,
+   "lon": -52
+  },
+  "javari": {
+   "label": "Údolí Javari",
+   "lat": -5,
+   "lon": -72
+  },
+  "cina": {
+   "label": "Čína",
+   "lat": 35,
+   "lon": 104
+  },
+  "mongolsko": {
+   "label": "Mongolsko",
+   "lat": 46.9,
+   "lon": 103.8
+  },
+  "saudska": {
+   "label": "Saúdská Arábie",
+   "lat": 24,
+   "lon": 45
+  },
+  "laos": {
+   "label": "Laos",
+   "lat": 19.8,
+   "lon": 102.5
+  },
+  "kambodza": {
+   "label": "Kambodža",
+   "lat": 12.6,
+   "lon": 104.9
+  },
+  "uganda": {
+   "label": "Uganda",
+   "lat": 1.4,
+   "lon": 32.3
+  },
+  "jordansko": {
+   "label": "Jordánsko",
+   "lat": 31,
+   "lon": 36.5
+  },
+  "azerbajdzan": {
+   "label": "Ázerbájdžán",
+   "lat": 40.1,
+   "lon": 47.6
+  },
+  "oman": {
+   "label": "Omán",
+   "lat": 21.5,
+   "lon": 55.9
+  },
+  "madagaskar": {
+   "label": "Madagaskar",
+   "lat": -19,
+   "lon": 46.9
+  },
+  "srilanka": {
+   "label": "Srí Lanka",
+   "lat": 7.9,
+   "lon": 80.8
+  },
+  "zanzibar": {
+   "label": "Zanzibar",
+   "lat": -6.1,
+   "lon": 39.3
+  },
+  "pakistan": {
+   "label": "Pákistán",
+   "lat": 30.4,
+   "lon": 69.3
+  },
+  "karibik": {
+   "label": "Karibik",
+   "lat": 15,
+   "lon": -70
+  },
+  "iran": {
+   "label": "Írán",
+   "lat": 32.4,
+   "lon": 53.7
+  },
+  "mexiko": {
+   "label": "Mexiko",
+   "lat": 23.6,
+   "lon": -102.5
+  },
+  "malajsie": {
+   "label": "Malajsie",
+   "lat": 4.2,
+   "lon": 102
+  },
+  "namibie": {
+   "label": "Namibie",
+   "lat": -22.9,
+   "lon": 18.5
+  },
+  "havaj": {
+   "label": "Havaj",
+   "lat": 20.8,
+   "lon": -156.3
+  },
+  "trango": {
+   "label": "Trango, Karákóram",
+   "lat": 35.74,
+   "lon": 76.15
+  },
+  "pointe": {
+   "label": "Pointe Percée",
+   "lat": 46,
+   "lon": 6.5
+  },
+  "cernahora": {
+   "label": "Černá Hora (Tara)",
+   "lat": 43.15,
+   "lon": 19.1
+  },
+  "stetind": {
+   "label": "Stetind",
+   "lat": 68.17,
+   "lon": 16.6
+  },
+  "balt": {
+   "label": "Baltské moře",
+   "lat": 57,
+   "lon": 19
+  },
+  "patagonie": {
+   "label": "Patagonie",
+   "lat": -48,
+   "lon": -71.5
+  }
+ },
+ "rules": [
+  {
+   "match": "nepal|annapurn",
+   "place": "nepal"
+  },
+  {
+   "match": "norsk",
+   "place": "norsko"
+  },
+  {
+   "match": "tenerife",
+   "place": "tenerife"
+  },
+  {
+   "match": "kanar",
+   "place": "kanary"
+  },
+  {
+   "match": "vietnam",
+   "place": "vietnam"
+  },
+  {
+   "match": "mekong",
+   "place": "mekong"
+  },
+  {
+   "match": "aconcagua",
+   "place": "aconcagua"
+  },
+  {
+   "match": "argentin",
+   "place": "argentina"
+  },
+  {
+   "match": "novy zeland",
+   "place": "nz"
+  },
+  {
+   "match": "taiwan",
+   "place": "taiwan"
+  },
+  {
+   "match": "indonesi",
+   "place": "indonesie"
+  },
+  {
+   "match": "\\bbali\\b",
+   "place": "bali"
+  },
+  {
+   "match": "etiopi",
+   "place": "etiopie"
+  },
+  {
+   "match": "holandsk",
+   "place": "nl"
+  },
+  {
+   "match": "turec",
+   "place": "turecko"
+  },
+  {
+   "match": "ekvador",
+   "place": "ekvador"
+  },
+  {
+   "match": "svycar|swiss|via alpina|syrovy",
+   "place": "svycarsko"
+  },
+  {
+   "match": "marok|marock|tazin",
+   "place": "maroko"
+  },
+  {
+   "match": "mont blanc",
+   "place": "montblanc"
+  },
+  {
+   "match": "australi",
+   "place": "australie"
+  },
+  {
+   "match": "island|jotnar",
+   "place": "island"
+  },
+  {
+   "match": "makedon",
+   "place": "makedonie"
+  },
+  {
+   "match": "albani",
+   "place": "albanie"
+  },
+  {
+   "match": "camino",
+   "place": "camino"
+  },
+  {
+   "match": "azory",
+   "place": "azory"
+  },
+  {
+   "match": "chile",
+   "place": "chile"
+  },
+  {
+   "match": "^indie$",
+   "place": "indie"
+  },
+  {
+   "match": "jizni indie",
+   "place": "jindie"
+  },
+  {
+   "match": "severni indie",
+   "place": "sindie"
+  },
+  {
+   "match": "thajsk",
+   "place": "thajsko"
+  },
+  {
+   "match": "haute route",
+   "place": "pyreneje"
+  },
+  {
+   "match": "colorado",
+   "place": "colorado"
+  },
+  {
+   "match": "alpach|alpy",
+   "place": "alpy"
+  },
+  {
+   "match": "apalac",
+   "place": "apalace"
+  },
+  {
+   "match": "ausangate",
+   "place": "ausangate"
+  },
+  {
+   "match": "\\bperu\\b(?!: trek)",
+   "place": "peru"
+  },
+  {
+   "match": "korsik",
+   "place": "korsika"
+  },
+  {
+   "match": "afrik|afric",
+   "place": "afrika"
+  },
+  {
+   "match": "stredni amerik",
+   "place": "camerika"
+  },
+  {
+   "match": "irak",
+   "place": "irak"
+  },
+  {
+   "match": "skotsk",
+   "place": "skotsko"
+  },
+  {
+   "match": "bosna",
+   "place": "bosna"
+  },
+  {
+   "match": "filipin",
+   "place": "filipiny"
+  },
+  {
+   "match": "dolomit",
+   "place": "dolomity"
+  },
+  {
+   "match": "pacificka",
+   "place": "pct"
+  },
+  {
+   "match": "narodni parky usa|^usa$",
+   "place": "usa"
+  },
+  {
+   "match": "utah|arizon|jihozapad",
+   "place": "swusa"
+  },
+  {
+   "match": "aljask",
+   "place": "aljaska"
+  },
+  {
+   "match": "kyrgyz|patagonie asie",
+   "place": "kyrgyzstan"
+  },
+  {
+   "match": "bolivi",
+   "place": "bolivie"
+  },
+  {
+   "match": "rumunsk",
+   "place": "rumunsko"
+  },
+  {
+   "match": "gruzi",
+   "place": "gruzie"
+  },
+  {
+   "match": "laponsk",
+   "place": "laponsko"
+  },
+  {
+   "match": "spicberk",
+   "place": "spicberky"
+  },
+  {
+   "match": "himalaya",
+   "place": "himalaj"
+  },
+  {
+   "match": "portugal|rybarska",
+   "place": "portugalsko"
+  },
+  {
+   "match": "madeir",
+   "place": "madeira"
+  },
+  {
+   "match": "venezuel",
+   "place": "venezuela"
+  },
+  {
+   "match": "los llanos",
+   "place": "llanos"
+  },
+  {
+   "match": "nikaragu",
+   "place": "nikaragua"
+  },
+  {
+   "match": "polsko",
+   "place": "polsko"
+  },
+  {
+   "match": "napric asii",
+   "place": "asie"
+  },
+  {
+   "match": "korea",
+   "place": "korea"
+  },
+  {
+   "match": "nigeri",
+   "place": "nigerie"
+  },
+  {
+   "match": "do ceska|stezka cesk|stezkar",
+   "place": "cesko"
+  },
+  {
+   "match": "malediv",
+   "place": "maledivy"
+  },
+  {
+   "match": "japon|wagashi",
+   "place": "japonsko"
+  },
+  {
+   "match": "great divide",
+   "place": "kanada"
+  },
+  {
+   "match": "brazili",
+   "place": "brazilie"
+  },
+  {
+   "match": "amazonii",
+   "place": "javari"
+  },
+  {
+   "match": "^cina$",
+   "place": "cina"
+  },
+  {
+   "match": "mongol",
+   "place": "mongolsko"
+  },
+  {
+   "match": "saudsk",
+   "place": "saudska"
+  },
+  {
+   "match": "\\blaos",
+   "place": "laos"
+  },
+  {
+   "match": "kambodz",
+   "place": "kambodza"
+  },
+  {
+   "match": "uganda",
+   "place": "uganda"
+  },
+  {
+   "match": "jordan",
+   "place": "jordansko"
+  },
+  {
+   "match": "azerbajdz",
+   "place": "azerbajdzan"
+  },
+  {
+   "match": "\\boman\\b",
+   "place": "oman"
+  },
+  {
+   "match": "madagaskar",
+   "place": "madagaskar"
+  },
+  {
+   "match": "sri lank",
+   "place": "srilanka"
+  },
+  {
+   "match": "zanzibar",
+   "place": "zanzibar"
+  },
+  {
+   "match": "pakistan",
+   "place": "pakistan"
+  },
+  {
+   "match": "karibik",
+   "place": "karibik"
+  },
+  {
+   "match": "\\biran\\b",
+   "place": "iran"
+  },
+  {
+   "match": "mexik",
+   "place": "mexiko"
+  },
+  {
+   "match": "malajsi",
+   "place": "malajsie"
+  },
+  {
+   "match": "namibi",
+   "place": "namibie"
+  },
+  {
+   "match": "havaj",
+   "place": "havaj"
+  },
+  {
+   "match": "vecny plamen",
+   "place": "trango"
+  },
+  {
+   "match": "pointe percee",
+   "place": "pointe"
+  },
+  {
+   "match": "bikerafting",
+   "place": "cernahora"
+  },
+  {
+   "match": "dve cela ctyri",
+   "place": "stetind"
+  },
+  {
+   "match": "baltic tour",
+   "place": "balt"
+  },
+  {
+   "match": "patagoni(?!e asie)",
+   "place": "patagonie"
+  }
+ ]
+}
